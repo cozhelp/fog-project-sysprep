@@ -22,7 +22,7 @@ GoTo :EOF
 if exist "C:\Windows\System32\sysprep\unattend.xml" GoTo :EOF
 Set File=%1
 echo Grabing SysPrep answer file
-curl https://apt.cozhelp.com/git/cozhelp/fog-project-sysprep/-/raw/main/%File% -o "C:\Users\Administrator\Desktop\unattend.xml"
+curl https://raw.githubusercontent.com/cozhelp/fog-project-sysprep/main/%File% -o "C:\Users\Administrator\Desktop\unattend.xml"
 echo.
 echo.
 echo Do you want to adjust the answer file on the desktop
