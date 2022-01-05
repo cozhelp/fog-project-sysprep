@@ -56,7 +56,7 @@ GoTo :EOF
 :Disable_Bit-Locker
 echo Disable Bit-Locker
 manage-bde -status
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Disable-Bitlocker –MountPoint 'C:'"
+"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Disable-Bitlocker -MountPoint 'C:'"
 echo.
 GoTo :EOF
 
