@@ -3,15 +3,16 @@ title Fog-Project Sysprep
 set this_file=%0
 CLS
 
-Call :Grab_SysPrep_Answer_File unattend-Win10-21H1.xml
+Set Answer_file_from_git_repo=unattend-Win10-21H1-ImpactLocal.xml
+Set FogServer=fogserver.local
+
+Call :Grab_SysPrep_Answer_File %Answer_file_from_git_repo%
 Call :Power_Settings
 Call :Rename_Computer
 Call :Install_Powershell_WU_Tools
 Call :Run_Powershell_WU_Tools
-REM Call :Disable_Bit-Locker
 Call :Install_Choco
-Call :Remove_Apps
-Call :Fog_SmartInstaller fogserver.local
+Call :Fog_SmartInstaller %FogServer%
 Call :Sysprep
 
 GoTo :EOF
@@ -53,48 +54,9 @@ GoTo :EOF
 
 
 
-:Disable_Bit-Locker
-echo Disable Bit-Locker
-manage-bde -status
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Disable-Bitlocker -MountPoint 'C:'"
-echo.
-GoTo :EOF
-
-
-
 :Install_Choco
 echo Install Choco
 @"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "[System.Net.ServicePointManager]::SecurityProtocol = 3072; iex ((New-Object System.Net.WebClient).DownloadString('https://chocolatey.org/install.ps1'))" && SET "PATH=%PATH%;%ALLUSERSPROFILE%\chocolatey\bin"
-echo.
-GoTo :EOF
-
-
-
-:Remove_Apps
-echo Remove Apps
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.Xbox.TCUI' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.XboxApp' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.XboxGameOverlay' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.XboxGamingOverlay' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.XboxSpeechToTextOverlay' | Remove-AppxPackage"
-
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.MicrosoftOfficeHub' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.Office.OneNote' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.SkypeApp' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.MixedReality.Portal' | Remove-AppxPackage"
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'Microsoft.YourPhone' | Remove-AppxPackage"
-REM Windows built in Mail-App
-"%SystemRoot%\System32\WindowsPowerShell\v1.0\powershell.exe" -NoProfile -InputFormat None -ExecutionPolicy Bypass -Command "Get-AppxPackage 'microsoft.windowscommunicationsapps' | Remove-AppxPackage"
-
-REM Uninstall PC Health Check
-REM wusa /uninstall /kb:5005463
-
-REM Prevents "Suggested Applications" returning
-reg add "HKLM\SOFTWARE\Policies\Microsoft\Windows\CloudContent" /v DisableWindowsConsumerFeatures /t REG_DWORD /d 1 /f
-reg add "HKLM\SOFTWARE\Policies\Microsoft\WindowsStore" /v AutoDownload /t REG_DWORD /d 2 /f
-
-REM Disable Remote Assistance
-reg add "HKLM\System\CurrentControlSet\Control\Remote Assistance" /v fAllowToGetHelp /t REG_DWORD /d 0 /f
 echo.
 GoTo :EOF
 

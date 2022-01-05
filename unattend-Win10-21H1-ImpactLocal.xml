@@ -15,8 +15,8 @@
                             <Value />
                             <PlainText>true</PlainText>
                         </Password>
-                        <DisplayName>Owner</DisplayName>
-                        <Name>Owner</Name>
+                        <DisplayName>ImpactLocal</DisplayName>
+                        <Name>ImpactLocal</Name>
                         <Group>Administrators</Group>
                     </LocalAccount>
                 </LocalAccounts>
